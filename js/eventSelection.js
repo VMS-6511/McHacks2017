@@ -1,6 +1,6 @@
 function scheduleOptimization(){
   var start1 = "2013/05/29 12:30 PM";
-  var end1 = "2013/05/29 01:30 PM";
+  var end1 = "2013/05/29 01:00 PM";
   var start1 = new Date(Date.parse(start1));
   var end1 = new Date(Date.parse(end1));
   var weight1 = 5;
@@ -47,6 +47,7 @@ function scheduleOptimization(){
   console.log(findMaxWeightRecursion(mergeSort(eventList), numberOfEvents));
 }
  
+ //Merge Sort to ensure tha
 function mergeSort(eventList) {
   var numberOfEvents = eventList.length;
   if (numberOfEvents < 2){
@@ -124,20 +125,27 @@ function latestNonConflict(eventList, numberOfEvents) {
 
 function findMaxWeightRecursion(eventList, numberOfEvents) {
   if (numberOfEvents == 1) {//Base Case
-    return (eventList[numberOfEvents-1])[3];
+    return [(eventList[numberOfEvents-1])[3],(eventList[numberOfEvents-1])[1]];
   }// If only one element left in list, return that amount
 
   var inlcudeWeight = (eventList[numberOfEvents-1])[3];//Start with base current weight
-
+  var includedPath = [(eventList[numberOfEvents-1])[1]];
   var lastSelected = latestNonConflict(eventList, numberOfEvents);//Index of last selected
 
   if (lastSelected != false){
-    inlcudeWeight += findMaxWeightRecursion(eventList, lastSelected);
+    inlcudeWeight += findMaxWeightRecursion(eventList, lastSelected)[0];
+    includedPath = includedPath.concat(findMaxWeightRecursion(eventList, lastSelected)[1]);
   }
 
-  var excludeWeight = findMaxWeightRecursion(eventList, numberOfEvents-1);
+  var excludeWeight = findMaxWeightRecursion(eventList, numberOfEvents-1)[0];
+  var excludePath = findMaxWeightRecursion(eventList, numberOfEvents-1)[1];
   console.log("End of a loop");
-  return Math.max(inlcudeWeight, excludeWeight);
+  if (Math.max(inlcudeWeight, excludeWeight) == inlcudeWeight) {
+   return [Math.max(inlcudeWeight, excludeWeight), includedPath]; 
+  }
+  else {
+    return [Math.max(inlcudeWeight, excludeWeight), excludePath];
+  }
 }
 
 
