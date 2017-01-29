@@ -27,7 +27,8 @@ function scheduleOptimization() {
   var eventList = [["eventID1",start1,end1,weight1],["eventID2",start2,end2,weight2],["eventID3",start3,end3,weight3]];
   var numberOfEvents = eventList.length;
 //Testing with the console log to debug
-  console.log(findMaxWeightRecursion(mergeSort(eventList), numberOfEvents));
+//Reverse the list, that way events are in order of which one to attend first
+  console.log(findMaxWeightRecursion(mergeSort(eventList), numberOfEvents)[1].reverse());
 }
 
 //Merge Sort to ensure that list of events are organized in a way where
@@ -86,12 +87,12 @@ function latestNonConflict(eventList, numberOfEvents) {
 function findMaxWeightRecursion(eventList, numberOfEvents) {
 //Base Case
   if (numberOfEvents == 1) {
-    return [(eventList[numberOfEvents-1])[3],(eventList[numberOfEvents-1])[1]];
+    return [(eventList[numberOfEvents-1])[3],[(eventList[numberOfEvents-1])]];
   }
 // If only one element left in list, return that amount
 //Start with base current weight and pathing
   var inlcudeWeight = (eventList[numberOfEvents-1])[3];
-  var includedPath = [(eventList[numberOfEvents-1])[1]];
+  var includedPath = [(eventList[numberOfEvents-1])];
 //Index of last selected
   var lastSelected = latestNonConflict(eventList, numberOfEvents);
 //Recurse
@@ -101,7 +102,7 @@ function findMaxWeightRecursion(eventList, numberOfEvents) {
   }
 
   var excludeWeight = findMaxWeightRecursion(eventList, numberOfEvents-1)[0];
-  var excludePath = findMaxWeightRecursion(eventList, numberOfEvents-1)[1];
+  var excludePath = findMaxWeightRecursion(eventList, numberOfEvents-1);
   if (Math.max(inlcudeWeight, excludeWeight) == inlcudeWeight) {
    return [Math.max(inlcudeWeight, excludeWeight), includedPath]; 
   }
