@@ -11,8 +11,14 @@ function scheduleOptimization(){
   var end2 = new Date(Date.parse(end2));
   var weight2 = 3;
 
+  var start3 = "2013/05/29 01:00 PM";
+  var end3 = "2013/05/29 02:30 PM";
+  var start3 = new Date(Date.parse(start3));
+  var end3 = new Date(Date.parse(end3));
+  var weight3 = 6;
+
   //var eventList = [["eventID1",start1,end1,weight1]];
-  var eventList = [["eventID1",start1,end1,weight1],["eventID2",start2,end2,weight2]];
+  var eventList = [["eventID1",start1,end1,weight1],["eventID2",start2,end2,weight2],["eventID3",start3,end3,weight3]];
   var numberOfEvents = eventList.length;
   var optimizedEvents = [eventList[0]];
   var lastVisited = 0;
@@ -35,12 +41,13 @@ function scheduleOptimization(){
 //    console.log(optimizedEvents[1]);
 //  }
 //  console.log(findMaxProfitRecursion(eventList, numberOfEvents));
-  mergeSort(eventList);
-  console.log(mergeSort(eventList));
+//  console.log(eventList);
+//  console.log(mergeSort(eventList));
+//  console.log(latestNonConflict(mergeSort(eventList),numberOfEvents));
   console.log(findMaxWeightRecursion(mergeSort(eventList), numberOfEvents));
 }
  
-function mergeSort(eventList){
+function mergeSort(eventList) {
   var numberOfEvents = eventList.length;
   if (numberOfEvents < 2){
     return eventList;
@@ -53,22 +60,25 @@ function mergeSort(eventList){
   return merge(mergeSort(left), mergeSort(right));
 }
  
-function merge(left, right){
+function merge(left, right) {
   var result = [];
   while (left.length && right.length) {
       if (left[0][2] <= right[0][2]) {
           result.push(left.shift());
-      } else {
+      } 
+      else {
           result.push(right.shift());
       }
   }
  
-  while (left.length)
+  while (left.length) {
       result.push(left.shift());
- 
-  while (right.length)
+ }
+
+  while (right.length) {
       result.push(right.shift());
- 
+ }
+
   return result;
 }
 
@@ -100,27 +110,29 @@ function merge(left, right){
 //  return (event1[2] < event2[2]); //Returns event True if event2 finishes later
 //}
 
-function latestNonConflict(eventList, numberOfEvents){
+function latestNonConflict(eventList, numberOfEvents) {
   var index = numberOfEvents - 1;//Index == the last item on list
-  if (((eventList[index])[1]) >= ((eventList[index-1])[2])){
+  if (((eventList[index])[1]) >= ((eventList[index-1])[2])) {
+    console.log("Returning Index");
     return index;
   }
   else{
+    console.log("Returning False");
     return false;
   }
 }
 
-function findMaxWeightRecursion(eventList, numberOfEvents, resultPath){
-  if (numberOfEvents == 1){
+function findMaxWeightRecursion(eventList, numberOfEvents) {
+  if (numberOfEvents == 1) {//Base Case
     return (eventList[numberOfEvents-1])[3];
   }// If only one element left in list, return that amount
 
   var inlcudeWeight = (eventList[numberOfEvents-1])[3];//Start with base current weight
 
-  var lastSelected = latestNonConflict(eventList, numberOfEvents);//Last Selected pair starting from right
+  var lastSelected = latestNonConflict(eventList, numberOfEvents);//Index of last selected
 
   if (lastSelected != false){
-    inlcudeWeight = inlcudeWeight + (findMaxWeightRecursion(eventList, lastSelected-1));
+    inlcudeWeight += findMaxWeightRecursion(eventList, lastSelected);
   }
 
   var excludeWeight = findMaxWeightRecursion(eventList, numberOfEvents-1);
