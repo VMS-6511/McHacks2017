@@ -1,3 +1,5 @@
+<?php include '/sessionCheck.php' ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -55,10 +57,10 @@
                         <a href="#">Home</a>
                     </li>
                     <li>
-                        <a href="createEvent.html">Create Occasion</a>
+                        <a href="createEvent.php">Create Occasion</a>
                     </li>
 					<li>
-                        <a href="login.html">Logout</a>
+                        <a href="logout.php">Logout</a>
                     </li>
                 </ul>
             </div>
@@ -89,7 +91,7 @@
 				<h4><b>End Date (yyyy/dd/mm):</b>  2017/16/04</h4>
 				<h4><b>Location:</b>  INDIO, CA</h4>
 				<br>
-                <a class="btn btn-primary" href="editOccasion.html">Edit Occasion <span class="glyphicon glyphicon-chevron-right"></span></a>
+                <a class="btn btn-primary" href="editOccasion.php">Edit Occasion <span class="glyphicon glyphicon-chevron-right"></span></a>
 				<a class="btn btn-primary" href="">Optimize Occasion <span class="glyphicon glyphicon-chevron-right"></span></a>
             </div>
         </div>
