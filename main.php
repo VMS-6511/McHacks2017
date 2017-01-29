@@ -11,7 +11,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Occasion Optimizer</title>
+    <title>timeCrunch</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -34,7 +34,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="testIndex.html">Occasion Optimizer</a>
+                <a class="navbar-brand" href="main.php">timeCrunch</a>
             </div>
 			
 			<!-- Search Bar -->
@@ -54,7 +54,7 @@
             <div class="collapse navbar-collapse navbar-right" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li class = "active">
-                        <a href="#">Home</a>
+                        <a href="main.php">Home</a>
                     </li>
                     <li>
                         <a href="createEvent.php">Create Occasion</a>
@@ -73,8 +73,29 @@
     <div class="container">
 		<h1>My Occasions</h1>
         
-        
-        <!-- Project One -->
+		<?php
+		// Create connection
+		$conn = mysqli_connect("localhost", "root", "", "mchacks");
+		// Check connection
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+		
+		$id = $_SESSION["ID"];
+		$sql = "SELECT *
+				FROM occasions WHERE u_id = $id";
+		$result = $conn->query($sql);
+		
+		if($result->num_rows > 0) {
+			// output data of each row
+			while($row = $result->fetch_assoc()) {
+				$occID = $row['o_id'];
+				$occasion = $row['o_name'];
+				$sDate = $row['s_date'];
+				$eDate = $row['e_date'];
+				$locale = $row['location'];
+			?>
+			<!-- Project One -->
         <div class="row">
 			<div class="col-lg-12">
                 <h1 class="page-header">
@@ -86,16 +107,28 @@
             </div>
 
             <div class="col-md-8">
-                <h4><b>Occasion Name:</b> Cochella</h4>
-				<h4><b>Start Date (yyyy/dd/mm):</b> 2017/14/04</h4>
-				<h4><b>End Date (yyyy/dd/mm):</b>  2017/16/04</h4>
-				<h4><b>Location:</b>  INDIO, CA</h4>
+                <h4><b>Occasion Name: </b><?php echo $occasion; ?> </h4>
+				<h4><b>Start Date (YYYY/DD/MM): </b> <?php echo $sDate; ?></h4>
+				<h4><b>End Date (YYYY/DD/MM): </b>  <?php echo $eDate; ?></h4>
+				<h4><b>Location: </b>  <?php echo $locale; ?></h4>
 				<br>
+				<form method="get">
                 <a class="btn btn-primary" href="editOccasion.php">Edit Occasion <span class="glyphicon glyphicon-chevron-right"></span></a>
-				<a class="btn btn-primary" href="">Optimize Occasion <span class="glyphicon glyphicon-chevron-right"></span></a>
+				<a class="btn btn-primary" href="optimizeEvent.php?occID=<?php echo $occID ?> ">Optimize Occasion <span class="glyphicon glyphicon-chevron-right"></span></a>
+				</form>
             </div>
         </div>
 		<hr>
+		
+		<?php
+			}
+		}
+		else{
+			echo "You have no saved occasions";
+		}
+		?>
+		
+        
       
 
     </div>

@@ -1,3 +1,5 @@
+<?php include '/sessionCheck.php' ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,7 +11,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Occasion Optimizer</title>
+    <title>timeCrunch</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -32,7 +34,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="testIndex.html">Occasion Optimizer</a>
+                <a class="navbar-brand" href="main.php">timeCrunch</a>
             </div>
 			
 			<!-- Search Bar -->
@@ -51,11 +53,14 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse navbar-right" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li class="active">
-                        <a href="signUp.html">Sign Up</a>
+                    <li class = "active">
+                        <a href="main.php">Home</a>
                     </li>
                     <li>
-                        <a href="login.html">Login</a>
+                        <a href="createEvent.php">Create Occasion</a>
+                    </li>
+					<li>
+                        <a href="logout.php">Logout</a>
                     </li>
                 </ul>
             </div>
@@ -63,35 +68,83 @@
         </div>
         <!-- /.container -->
     </nav>
-	
     <br>
     <br>    <!-- Page Content -->
-	 <div class="container">
-		<h1>Sign Up</h1>
-		<div class="col-md-6">
-			<div class="row" style="padding-top:50px">
-				<form method="post" action="signUp.php">
-					<div class="form-group">
-					<input type="text" class="form-control" id="firstName" name="fname" placeholder="First Name" required>
-					</div>
-					<div class="form-group">
-					<input type="text" class="form-control" id="lastName" name="lname" placeholder="Last Name" required>
-					</div>
-					<div class="form-group">
-					<input type="text" class="form-control" id="email" name="email" placeholder="Email" required>
-					</div>
-					<div class="form-group">
-					<input type="text" class="form-control" id="password" name="password" placeholder="Password" required>
-					</div>
+    <div class="container">
+		<h1>Optimize Events</h1>
+        
+		<?php 
+		
+		$events = array();
+		$allEvents = array();
+		$i = 0;
+		
+		$oID =  $_GET['occID'];
+		
+	
+		// Create connection
+		$conn = mysqli_connect("localhost", "root", "", "mchacks");
+		// Check connection
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+		
+		$id = $_SESSION["ID"];
+		$sql = "SELECT * FROM events WHERE o_id='$oID'
+				ORDER BY s_time ASC";
+		$result = $conn->query($sql);
+		
+		if($result->num_rows > 0) {
+			// output data of each row
+			while($row = $result->fetch_assoc()) {
+				$eId = $row['e_id'];
+				$eName = $row['e_name'];
+				$descrpt = $row['description'];
+				$sTime = $row['s_time'];
+				$eTime = $row['e_time'];
+				
+			?>
+			<!-- Project One -->
+        <div class="row">
+			<div class="col-lg-12">
+            <div class="col-md-8">
+                <h4><b>Event Name: </b><?php echo $eName; ?> </h4>
+				<h4><b>Description: </b> <?php echo $descrpt; ?></h4>
+				<h4><b>Start Time (YYYY/DD/MM HH:MM AM/PM): </b>  <?php echo $sTime; ?></h4>
+				<h4><b>End Time (YYYY/DD/MM HH:MM AM/PM): </b>  <?php echo $eTime; ?></h4>
+				<form method = "post">
+					<select name="value" onchange="test(this)">
+						<option value="">Select Value...</option>
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+					</select>
 					<br>
-					<button type="submit" class="btn btn-primary">Create Account<span class="glyphicon glyphicon-chevron-right"></span></button>
+					<br>
 				</form>
-				<br>
 			</div>
+        </div>
+		<hr>
 		</div>
+		<br>
+	
+			
+      <?php
+			$events[$i] = [$eId, $sTime, $eTime];
+			$allEvents[$i] = [$events[$i]];
+			$i++;
+			}
+		}
+		else{
+			echo "This occasion currently has no events scheduled";
+		}
+		?>
+		<a class="btn btn-primary" href="optimization.php">Perform Optimiztion<span class="glyphicon glyphicon-chevron-right"></span></a>
+
     </div>
     <!-- /.container -->
-
 
     <!-- jQuery -->
     <script src="js/jquery.js"></script>

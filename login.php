@@ -9,7 +9,7 @@ session_start();
 
 
 // Create connection
-$conn = mysqli_connect("localhost", "root", "root", "mchacks");
+$conn = mysqli_connect("localhost", "root", "", "mchacks");
 // Check connection
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
@@ -29,11 +29,11 @@ if ($result->num_rows > 0) {
 			$name = $row['f_name'];
 			$_SESSION["ID"] = $ID;
 			$_SESSION["Name"] = $name;
-			header("Location: index.php");
+			header("Location: ./main.php");
 			die();
 		}
 		else{
-			header("Location: login.php");
+			header("Location: ./login.html");
 			die();
 		}
 	}

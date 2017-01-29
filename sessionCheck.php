@@ -1,6 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION["ID"])) {
-	header("Location: login.html");
+	header("Location: ./index.html");
 	die();
+}
 ?>

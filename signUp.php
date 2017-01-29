@@ -4,7 +4,7 @@
 <?php
 
 // Create connection
-$conn = mysqli_connect("localhost", "root", "root", "mchacks");
+$conn = mysqli_connect("localhost", "root", "", "mchacks");
 // Check connection
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
@@ -19,9 +19,12 @@ $sql = "INSERT INTO users (f_name, l_name, email, password)
 VALUES ('$fname', '$lname', '$email', '$password')";
 
 if ($conn->query($sql) === TRUE) {
-    echo "New record created successfully";
+    header("Location: ./login.html");
+	die();
 } else {
     echo "Error: " . $sql . "<br>" . $conn->error;
+    header("Location: ./main.html");
+	die();
 }
 
 mysqli_close($conn);

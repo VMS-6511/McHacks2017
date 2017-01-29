@@ -102,7 +102,7 @@ function findMaxWeightRecursion(eventList, numberOfEvents) {
   }
 
   var excludeWeight = findMaxWeightRecursion(eventList, numberOfEvents-1)[0];
-  var excludePath = findMaxWeightRecursion(eventList, numberOfEvents-1);
+  var excludePath = findMaxWeightRecursion(eventList, numberOfEvents-1)[1];
   if (Math.max(inlcudeWeight, excludeWeight) == inlcudeWeight) {
    return [Math.max(inlcudeWeight, excludeWeight), includedPath]; 
   }
